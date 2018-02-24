@@ -1,0 +1,25 @@
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="uv.username">
+        <field-validator type="requiredstring">
+            <message>账号不能为空</message>
+        </field-validator>
+        <field-validator type="stringlength">
+        	<param name="minLength">4</param>
+        	<param name="maxLength">8</param>
+            <message>员工账号必须在4到8位之间</message>
+        </field-validator>
+        
+    </field>
+    
+    <field name="uv.password">
+        <field-validator type="requiredstring">
+            <message>密码不能为空</message>
+        </field-validator>
+        
+    </field>
+    
+</validators>

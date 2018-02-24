@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="root" namespace="/" extends="json-default" >
+	
+		<!-- 拦截器 -->
+		<interceptors>
+			<interceptor name="logincheck" class="com.geinek.interceptor.LoginCheckInterceptor" />
+			
+			<interceptor name="Encoding" class="com.geinek.interceptor.EncodingInterceptor"></interceptor>  
+			
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="logincheck"/>
+			</interceptor-stack>
+		</interceptors>
+		
+		
+		
+		<default-interceptor-ref name="loginStack" />  
+		
+		
+		
+		<!-- 定义全局结果 -->  
+        <global-results>  
+            <result name="login" type="redirect">http://localhost:8080/CompanyFinancial/user/login.jsp</result>  
+            <result name="tohome">/home/home.jsp</result>
+		    <result name="error">/error/error.jsp</result>
+		    <result name="sql">/error/error.jsp</result>
+		    <result name="root">/error/error.jsp</result>
+        </global-results>  
+        
+        <!-- 定义全局异常映射 -->
+        <global-exception-mappings>
+            <!-- 当出现 java.sql.SQLException 的时候 struts 将跳转到 sql -->
+            <exception-mapping exception="java.sql.SQLException" result="sql" />
+            <!-- 当出现 java.lang.Exception 的时候 struts 将跳转到 root -->
+            <exception-mapping exception="java.lang.Exception" result="root" />
+            
+            <exception-mapping exception="java.lang.RuntimeException" result="error" />
+        </global-exception-mappings>
+        
+		
+	</package>
+	
+	<!-- 用户包定义 -->
+	<package name="user" namespace="/user" extends="root" >
+	
+		
+
+		<action name="register" class="userRegisterAction" method="register">
+		    <result name="register">/user/login.jsp</result>
+		    <result name="input">/user/register.jsp</result>
+	
+		</action>
+		
+		<action name="logout" class="userLogoutAction" method="logout">
+		    <result name="login">/user/login.jsp</result>
+		</action>
+		
+		<action name="login" class="userLoginAction" method="execute">
+			<result name="input">/user/login.jsp</result>
+			<result name="login">/user/login.jsp</result>
+		    <result name="success">/home/home.jsp</result>
+		</action>
+		
+		<action name="photoshow" class="userPhotoShowAction" method="show">
+			<result name="show" type="stream">
+			    <param name="contentType">${contentType}</param>
+			    <param name="inputName">inputStream</param>
+			    <param name="contentDisposition">inline;filename="${fileName}"</param> 
+			</result>
+		</action>
+	
+	</package>
+	
+	
+	<!-- 部门包定义 -->
+	<package name="department" namespace="/department" extends="root">
+		<action name="addDepartment" class="departmentProcessAction" method="addDep" >
+			<result name="main" type="redirect">/department/tolist.action</result>
+			<result name="input">/department/AddDepartment.jsp</result>
+			<result name="success">/department/tolist.action</result>
+		</action>
+		
+		<action name="tolist" class="departmentListAction" method="toList">
+			<result name="tolist">/department/main_dep.jsp</result>
+		</action>
+	<action name="tolist1" class="departmentListAction" method="toList">
+			<result name="tolist">/finance/analysis.jsp</result>
+		</action>
+		
+		
+		<action name="modifyDepartment" class="departmentProcessAction" method="modify">
+			<result name="modify" type="redirect" >/department/tolist.action</result>		
+		</action>
+		
+		<action name="deleteDepartment" class="departmentProcessAction" method="delete" >
+			<result name="delete" type="redirectAction">tolist.action</result>			
+		</action>
+		
+	</package>
+	
+	
+	<package name="manager" namespace="/manager" extends="root">
+		<action name="toManager" class="managerMainAction" method="toadd" >
+			<result name="toadd">/manager/AddManager.jsp</result>
+		</action>
+		
+		<action name="addManager" class="managerMainAction" method="add" >
+			<result name="add" type="redirect">/manager/listManager.action</result>			
+
+		</action>
+		
+		<action name="deleteManager" class="managerMainAction" method="delete">
+			<result name="delete" type="redirectAction" >listManager.action</result>		
+		</action>
+		
+		<action name="toModifyManager" class="managerMainAction" method="tomodify" >
+			<result name="tomodify">/manager/ModifyManager.jsp</result>
+		</action>
+		
+		<action name="modifyManager" class="managerMainAction" method="modify">
+			<result name="modify" type="redirect" >/manager/listManager.action</result>		
+		</action>
+		
+		<action name="listManager" class="managerListAction" method="toList" >
+			<result name="tolist">/manager/ListManager.jsp</result>
+		</action>
+		
+	</package>
+	
+	
+	<!-- 财务包定义 -->
+	<package name="finance" namespace="/finance" extends="root">
+		<action name="toExepend" class="exependMainAction" method="toadd">
+			<result name="toadd" >/finance/AddExepend.jsp</result>			
+		</action>
+		<action name="addExepend" class="exependMainAction" method="add">
+			<result name="add" type="redirect">/finance/listExepend.action</result>			
+		</action>
+		<action name="toModifyExepend" class="exependMainAction" method="tomodify" >
+			<result name="tomodify">/finance/ModifyExepend.jsp</result>
+		</action>
+		<action name="modifyExepend" class="exependMainAction" method="modify">
+			<result name="modify" type="redirect" >/finance/listExepend.action</result>		
+		</action>
+		<action name="deleteExepend" class="exependMainAction" method="delete">
+			<result name="delete" type="redirectAction" >listExepend.action</result>		
+		</action>
+		<action name="listExepend" class="exependListAction" method="toList">
+			<result name="tolist">/finance/ListExepend.jsp</result>
+		</action>
+		
+		<action name="toIncome" class="incomeMainAction" method="toadd">
+			<result name="toadd" >/finance/AddIncome.jsp</result>			
+		</action>
+		<action name="addIncome" class="incomeMainAction" method="add">
+			<result name="add" type="redirect">/finance/listIncome.action</result>			
+		</action>
+		<action name="toModifyIncome" class="incomeMainAction" method="tomodify" >
+			<result name="tomodify">/finance/ModifyIncome.jsp</result>
+		</action>
+		<action name="modifyIncome" class="incomeMainAction" method="modify">
+			<result name="modify" type="redirect" >/finance/listIncome.action</result>		
+		</action>
+		<action name="deleteIncome" class="incomeMainAction" method="delete">
+			<result name="delete" type="redirectAction" >listIncome.action</result>		
+		</action>
+		<action name="listIncome" class="incomeListAction" method="toList">
+			<result name="tolist">/finance/ListIncome.jsp</result>
+		</action>
+		
+		<action name="tomainIncome" class="incomePagesAction" method="tomain">
+			<result name="tomain">/finance/ListIncome.jsp</result>
+		</action>
+		<action name="tomainExepend" class="exependPagesAction" method="tomain">
+			<result name="tomain">/finance/ListExepend.jsp</result>
+		</action>
+		
+		<action name="searchIncome" class="listByIncomeAction" method="toList">
+			<result name="tolist" >/finance/SearchIncome.jsp</result>
+		</action>
+		
+		<action name="searchExepend" class="listByExependAction" method="toList">
+			<result name="tolist" >/finance/SearchExepend.jsp</result>
+		</action>
+
+	</package>
+
+
+</struts>

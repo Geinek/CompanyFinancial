@@ -1,0 +1,45 @@
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="dv.dcode">
+        <field-validator type="requiredstring">
+            <message>编号不能为空</message>
+        </field-validator>
+        <field-validator type="regex">
+            <param name="regexExpression"><![CDATA[^[A-Z]+$]]></param>
+            <message>请输入大写的字母</message>
+        </field-validator>
+        <field-validator type="stringlength">
+        	<param name="minLength">3</param>
+        	<param name="maxLength">8</param>
+            <message>员工账号必须在3到8位之间</message>
+        </field-validator>
+        
+    </field>
+    
+    <field name="dv.mname">
+        <field-validator type="email">
+            <message>请输入email</message>
+        </field-validator>
+
+    </field>
+    
+    <field name="dv.num">
+        <field-validator type="requiredstring">
+            <message>人数不能为空</message>
+        </field-validator>
+        <field-validator type="regex">
+            <param name="regexExpression"><![CDATA[^[0-9]*$]]></param>
+            <message>请输数字</message>
+        </field-validator>
+        <field-validator type="int">
+            <param name="min">1</param>
+            <param name="max">100</param>
+            <message>请输数字1-100</message>
+        </field-validator>
+        
+    </field>
+
+</validators>
